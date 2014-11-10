@@ -58,5 +58,22 @@
         }
     }
 
+    var docEl = document.documentElement;
+    var methodNames = ['matches', 'msMatchesSelector', 'mozMatchesSelector', 'webkitMatchesSelector', 'matchesSelector'];
+    var matchesMethod = '';
+
+    for (var i = 0, len = methodNames.length; i < len; i++) {
+        if (docEl[methodNames[i]]) {
+            matchesMethod = methodNames[i];
+            break;
+        }
+    }
+
+    fnd.is = function isFactory (selector) {
+        return function (element) {
+            return element[matchesMethod](selector)
+        }
+    };
+
     return fnd;
 }));
