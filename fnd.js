@@ -17,13 +17,10 @@
         return slice.call(arrayLike, 0);
     }
 
+    var isQSARe = /\S+[ ,>+~#\[\.]/mg;
+
     function isQSASelector (selector) {
-        return selector.indexOf(' ') > -1
-            && selector.indexOf(',') > -1
-            && selector.indexOf('>') > -1
-            && selector.indexOf('+') > -1
-            && selector.indexOf('~')
-            && selector.indexOf('[');
+        return isQSARe.test(selector);
     }
 
     var strategies = {

@@ -19,7 +19,11 @@
 
 	describe('fnd results', function () {
 		it('should return array, when elements exist', function () {
-			assert.isArray(fnd('body'), 'return array');
+			assert.isArray(fnd('body'), 'simple selector');
+			assert.isArray(fnd('.test'), 'by class name');
+			assert.isArray(fnd('div'), 'by tag name');
+			assert.isArray(fnd('#mocha'), 'by id');
+			assert.isArray(fnd('div.test'), 'complex selector');
 		});
 
 		it('array elements should be instances of `HTMLElement`', function () {
