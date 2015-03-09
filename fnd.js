@@ -35,7 +35,6 @@
     };
 
     function getStrategy (selector, parent) {
-        parent = (parent || document);
         var firstChar = selector.substr(0, 1);
         if (isQSASelector(selector) || (firstChar === '#' && parent !== document)) { // searching by id in some context falls back to qSA
             return strategies.qSA;
