@@ -1,4 +1,6 @@
 (function (root, factory) {
+    'use strict';
+    /* global define, module */
     if (typeof define === 'function' && define.amd) { // AMD
         define([], factory);
     } else if (typeof exports === 'object') { // Node, browserify and alike
@@ -9,22 +11,27 @@
   }
 }(this, function () {
     'use strict';
-
+    /* global NodeList, HTMLCollection */
     var slice = Array.prototype.slice;
     function toArray (arrayLike) {
         return slice.call(arrayLike, 0);
     }
 
     function isQSASelector (selector) {
-        return selector.indexOf(' ') > -1 && selector.indexOf(',') > -1 && selector.indexOf('>') > -1 && selector.indexOf('+') > -1 && selector.indexOf('~')&& selector.indexOf('[');
+        return selector.indexOf(' ') > -1
+            && selector.indexOf(',') > -1
+            && selector.indexOf('>') > -1
+            && selector.indexOf('+') > -1
+            && selector.indexOf('~')
+            && selector.indexOf('[');
     }
 
     var strategies = {
-        '#': function (selector, parent) {
+        '#': function (selector) {
             return document.getElementById(selector.substr(1));
         },
         '.': function (selector, parent) {
-            return parent.getElementsByClassName(selector.substr(1))
+            return parent.getElementsByClassName(selector.substr(1));
         },
         'tagName': function (selector, parent) {
             return parent.getElementsByTagName(selector);
@@ -51,7 +58,7 @@
         if (!result || !result.length) {
             return null;
         } else {
-            if (result instanceof NodeList) {
+            if (result instanceof NodeList || result instanceof HTMLCollection) {
                 return toArray(result);
             } else {
                 return [result];
@@ -72,10 +79,10 @@
 
     fnd.is = function isFactory (selector) {
         return function (element) {
-            return element[matchesMethod](selector)
-        }
+            return element[matchesMethod](selector);
+        };
     };
-
+    /* eslint-disable */
     fnd.on = function (element) {
         var attach = element.addEventListener.bind(element);
         return function (eventName, handler, selector) {
@@ -87,12 +94,13 @@
                     if (fnd.is(selector)(event.target)) {
                         handler(event);
                     }
-                }
+                };
             }
 
             element.addEventListener(eventName, bound, selector);
-        }
+        };
     };
+    /* eslint-disable */
 
     return fnd;
 }));
