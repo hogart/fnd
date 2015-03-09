@@ -45,6 +45,7 @@
     }
 
     function fnd (selector, parent) {
+        parent = (parent || document);
         var searcher = getStrategy(selector, parent);
         var result = searcher(selector, parent);
 
