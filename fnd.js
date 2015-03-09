@@ -76,5 +76,23 @@
         }
     };
 
+    fnd.on = function (element) {
+        var attach = element.addEventListener.bind(element);
+        return function (eventName, handler, selector) {
+            var bound;
+            if (!selector) {
+                bound = handler;
+            } else {
+                bound = function (event) {
+                    if (fnd.is(selector)(event.target)) {
+                        handler(event);
+                    }
+                }
+            }
+
+            element.addEventListener(eventName, bound, selector);
+        }
+    };
+
     return fnd;
 }));
