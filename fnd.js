@@ -17,6 +17,10 @@
         return slice.call(arrayLike, 0);
     }
 
+    var isArray = Array.isArray || function(arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+
     var isQSARe = /\S+[ ,>+~#\[\.]/mg;
 
     function isQSASelector (selector) {
@@ -72,7 +76,7 @@
             throw new Error('Got null instead of element(s) when searching for "' + selector + '"');
         }
 
-        if (!Array.isArray(parent)) {
+        if (!isArray(parent)) {
             return seekIn(selector, parent);
         } else {
             if (parent.length === 1) {
