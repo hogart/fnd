@@ -18,12 +18,20 @@
 	});
 
 	describe('fnd results', function () {
+		it('should throw error when passed null as second argument', function () {
+			assert.throws(
+				fnd.bind(null, 'body', null),
+				'Got null instead of element\(s\) when searching for "body"',
+				'Threw Error instance with expected message'
+			);
+		});
+
 		it('should return array, when elements exist', function () {
 			assert.isArray(fnd('body'), 'simple selector');
-			assert.isArray(fnd('.test'), 'by class name');
+			assert.isArray(fnd('.testDiv'), 'by class name');
 			assert.isArray(fnd('div'), 'by tag name');
 			assert.isArray(fnd('#mocha'), 'by id');
-			assert.isArray(fnd('div.test'), 'complex selector');
+			assert.isArray(fnd('div.testDiv'), 'complex selector');
 		});
 
 		it('array elements should be instances of `HTMLElement`', function () {
@@ -43,6 +51,21 @@
 
 			assert.isArray(fnd('meta', head), 'meta tags present in head');
 			assert.isNull(fnd('meta', body), 'but not in body');
+		});
+
+		it('should accept array of elements as second argument', function () {
+			var body = fnd('body');
+			var head = fnd('head');
+			var headAndBody = fnd('head, body');
+
+			var div = fnd('.testDiv', body);
+			var divAndTitle = fnd('title, .testDiv');
+
+			assert.isArray(div, 'div found in a body which was found by fnd');
+			assert.isArray(divAndTitle, 'something found in a headAndBody');
+			assert.lengthOf(divAndTitle, 2, '2 elements found in a headAndBody');
+			assert.equal(divAndTitle[0].tagName.toLowerCase(), 'title', 'first element is title');
+			assert.equal(divAndTitle[1].tagName.toLowerCase(), 'div', 'second element is div');
 		});
 	});
 

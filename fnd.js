@@ -47,38 +47,80 @@
         }
     }
 
-    function fnd (selector, parent) {
+    function seekIn (selector, parent) {
         parent = (parent || document);
         var searcher = getStrategy(selector, parent);
         var result = searcher(selector, parent);
 
-        if (!result || !result.length) {
+        if (result === null) {
             return null;
         } else {
             if (result instanceof NodeList || result instanceof HTMLCollection) {
-                return toArray(result);
+                if (result.length) {
+                    return toArray(result);
+                } else {
+                    return null;
+                }
             } else {
                 return [result];
             }
         }
     }
 
-    var docEl = document.documentElement;
-    var methodNames = ['matches', 'msMatchesSelector', 'mozMatchesSelector', 'webkitMatchesSelector', 'matchesSelector'];
-    var matchesMethod = '';
+    function fnd (selector, parent) {
+        if (parent === null) {
+            throw new Error('Got null instead of element(s) when searching for "' + selector + '"');
+        }
 
-    for (var i = 0, len = methodNames.length; i < len; i++) {
-        if (docEl[methodNames[i]]) {
-            matchesMethod = methodNames[i];
-            break;
+        if (!Array.isArray(parent)) {
+            return seekIn(selector, parent);
+        } else {
+            if (parent.length === 1) {
+                return seekIn(selector, parent[0]);
+            } else {
+                var results = [];
+                var push = results.push.apply;
+                var found;
+
+                for (var i = 0, len = parent.length; i < len; i++) {
+                    found = seekIn(selector, parent[i]);
+                    if (found !== null) {
+                        push(found);
+                    }
+                }
+
+                if (results.length) {
+                    return results;
+                } else {
+                    return null;
+                }
+            }
         }
     }
 
-    fnd.is = function isFactory (selector) {
+    // determine which matches method is available
+    var matchesMethod = '';
+    (function () {
+        var docEl = document.documentElement;
+        var methodNames = ['matches', 'msMatchesSelector', 'mozMatchesSelector', 'webkitMatchesSelector', 'matchesSelector'];
+
+        for (var i = 0, len = methodNames.length; i < len; i++) {
+            if (docEl[methodNames[i]]) {
+                matchesMethod = methodNames[i];
+                break;
+            }
+        }
+    }());
+
+
+    function isFactory (selector) {
         return function (element) {
             return element[matchesMethod](selector);
         };
-    };
+    }
+
+    fnd.is = isFactory;
+
     /* eslint-disable */
     fnd.on = function (element) {
         var attach = element.addEventListener.bind(element);
@@ -88,7 +130,7 @@
                 bound = handler;
             } else {
                 bound = function (event) {
-                    if (fnd.is(selector)(event.target)) {
+                    if (isFactory(selector)(event.target)) {
                         handler(event);
                     }
                 };
