@@ -31,7 +31,9 @@
 			assert.isArray(fnd('.testDiv'), 'by class name');
 			assert.isArray(fnd('div'), 'by tag name');
 			assert.isArray(fnd('#mocha'), 'by id');
-			assert.isArray(fnd('div.testDiv'), 'complex selector');
+			assert.isArray(fnd('div.testDiv'), 'compound selector');
+			assert.isArray(fnd('[data-test]'), 'attr selector');
+			assert.isArray(fnd('x-tag'), 'custom tag');
 		});
 
 		it('array elements should be instances of `HTMLElement`', function () {
@@ -55,8 +57,6 @@
 
 		it('should accept array of elements as second argument', function () {
 			var body = fnd('body');
-			var head = fnd('head');
-			var headAndBody = fnd('head, body');
 
 			var div = fnd('.testDiv', body);
 			var divAndTitle = fnd('title, .testDiv');

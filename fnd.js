@@ -21,7 +21,7 @@
         return Object.prototype.toString.call(arg) === '[object Array]';
     };
 
-    var isQSARe = /\S+[ ,>+~#\[\.]/mg;
+    var isQSARe = /(.+[ ,>+~#:\[\.]|[\[:])/;
 
     function isQSASelector (selector) {
         return isQSARe.test(selector);
