@@ -38,7 +38,7 @@
         var handler = events[key];
         if (handler instanceof Function) {
             return handler;
-        } else if (handler instanceof String) {
+        } else if (typeof handler === 'string') {
             if (context[handler]) {
                 return context[handler];
             } else {
