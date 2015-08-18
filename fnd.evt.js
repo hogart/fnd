@@ -73,7 +73,7 @@
             unbinders.push(on(
                 element,
                 parts[0],
-                extractHandler(events, eventKey, context),
+                extractHandler(events, eventKey, context).bind(context),
                 parts[1]
             ));
         });
