@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "main": "fnd.js",
   "repository": "http://github.com/hogart/fnd.git",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^2.2.x",
     "eslint": "^0.18.x",
