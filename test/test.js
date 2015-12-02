@@ -88,5 +88,128 @@
 		});
 	});
 
+	describe('fnd.evt', function () {
+		function simulateEvent (el, type) {
+			var event = new MouseEvent(type, {
+				view: window,
+				bubbles: true,
+				cancelable: true
+			});
+			el.dispatchEvent(event);
+		}
+
+		describe('fnd.evt.on', function () {
+			var on = fnd.evt.on;
+
+			it('is a function', function () {
+				assert.isFunction(on, 'got a function');
+			});
+
+			it('adds event listener to element', function () {
+				var counter = 0;
+				var elem = fnd('.testDiv')[0];
+				function onClick (event) {
+					counter++;
+					assert.equal(event.type, 'click', 'Proper event type');
+				}
+
+				var off = on(elem, 'click', onClick);
+
+				assert.isFunction(off, 'returns function');
+
+				simulateEvent(elem, 'click');
+				assert.equal(counter, 1, 'handler called once');
+
+				off();
+
+				simulateEvent(elem, 'click');
+				assert.equal(counter, 1, 'handler was not called after "off"');
+			});
+
+			it('properly works with selectors, e.g. ".testDiv span"', function () {
+				var counter = 0;
+				var elem = fnd('.testDiv')[0];
+				var clickTarget = fnd('span', elem)[0];
+				function onClick (event) {
+					counter++;
+					assert.equal(event.target.nodeName.toLowerCase(), 'span');
+					assert.equal(event.type, 'click', 'Proper event type');
+				}
+
+				var off = on(elem, 'click', onClick, 'span');
+
+				simulateEvent(clickTarget, 'click');
+				assert.equal(counter, 1, 'handler called once');
+
+				off();
+
+				simulateEvent(clickTarget, 'click');
+				assert.equal(counter, 1, 'handler was not called after "off"');
+			});
+		});
+
+		it('is a function', function () {
+			assert.isFunction(fnd.evt, 'got a function');
+		});
+
+		it('binds simple handler map to element', function () {
+			var clickCounter = 0;
+			var dblClickCounter = 0;
+			var context = {
+				someUniquePropertyWithDistinctiveName: true,
+				someMethod: function (event) {
+					clickCounter++;
+					assert.equal(event.type, 'click');
+					assert.isTrue(this.someUniquePropertyWithDistinctiveName, 'Properly bound context');
+				}
+			};
+
+			var elem = fnd('.testDiv')[0];
+			var dblClickTarget = fnd('span', elem)[0];
+			var eventMap = {
+				click: 'someMethod',
+				'dblclick span': function (event) {
+					dblClickCounter++;
+					assert.ok(true, 'function literals in map');
+					assert.equal(event.type, 'dblclick');
+					assert.isTrue(this.someUniquePropertyWithDistinctiveName, 'Properly bound context');
+					assert.ok(fnd.is('span')(event.target));
+				}
+			};
+			var off = fnd.evt(elem, eventMap, context);
+
+			assert.isFunction(off);
+
+			simulateEvent(elem, 'click');
+			simulateEvent(dblClickTarget, 'dblclick');
+
+			assert.equal(clickCounter, 1, 'bound handler was called once');
+			assert.equal(dblClickCounter, 1, 'bound handler was called once');
+
+
+			off();
+
+			simulateEvent(elem, 'click');
+			simulateEvent(dblClickTarget, 'dblclick');
+
+			assert.equal(clickCounter, 1, 'bound handler haven\'t been called after off');
+			assert.equal(dblClickCounter, 1, 'bound handler haven\'t been called after off');
+		});
+
+		it('throws error if event map is erroneous', function () {
+			var eventMap = {
+				click: 'absentMethod'
+			};
+			var elem = fnd('.testDiv')[0];
+
+			assert.throws(
+				fnd.evt.bind(null, elem, eventMap, {}),
+				/Invalid or missing context for/,
+				'properly thrown error'
+			);
+		});
+
+	});
+
 	mocha.run();
 })(mocha, chai.assert, fnd);

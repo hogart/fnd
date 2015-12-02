@@ -12,6 +12,14 @@
 }(this, function (fnd) {
 	'use strict';
 
+    /**
+     *
+     * @param {HTMLElement} element
+     * @param {string} eventName
+     * @param {function} handler
+     * @param {string} [selector]
+     * @returns {Function}
+     */
     function on (element, eventName, handler, selector) {
         var boundHandler;
         var useCapture;
