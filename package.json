@@ -5,9 +5,9 @@
   "repository": "http://github.com/hogart/fnd.git",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^2.2.x",
-    "eslint": "^0.18.x",
-    "jscs": "^1.12.x",
+    "chai": "^3.4.x",
+    "eslint": "^1.10.x",
+    "jscs": "^2.6.x",
     "mocha": "^2.2.1",
     "opn": "^1.0.1"
   },
