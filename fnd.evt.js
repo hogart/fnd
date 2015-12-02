@@ -2,9 +2,9 @@
     'use strict';
     /* global define, module, require */
     if (typeof define === 'function' && define.amd) { // AMD
-        define(['fnd'], factory);
+        define(['./fnd'], factory);
     } else if (typeof exports === 'object') { // Node, browserify and alike
-        module.exports = factory(require('fnd'));
+        module.exports = factory(require('./fnd'));
     } else {
         // Browser globals (root is window)
         root.fnd.evt = factory(root.fnd);
