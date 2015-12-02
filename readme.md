@@ -40,6 +40,43 @@ var hrefs = fnd('a', items).map(function (link) { return link.href; }); // array
 
 Also refer to tests for examples.
 
+## fnd.evt
+
+fnd.evt provides adding event listeners via Backbone-like event maps. Example:
+
+```js
+var widget = {
+    title: 'I am some widget',
+    onSubmit: function (event) { // either describe your methods in some object/class...
+        console.log(this.title); // 'I am some widget'
+        event.preventDefault(); // event is vanilla DOM event
+    }
+}
+
+var eventMap = {
+    'submit form': 'onSumbit', // method name from context
+    'reset form': function (event) { // ...or use function literals in event map, or mix and match
+        console.log(this.title); // again, 'I am some widget'
+    }
+}
+
+var off = fnd.evt(fnd('.some-element')[0], eventMap, widget); // off is a function which, when called, removes event listeners
+```
+
+`fnd.evt` relies on `fnd.evt.on`, which is wrapper for EventTarget.addEventListener with event delegation support:
+
+```js
+// it accepts 3 or 4 arguments and returns a function
+var off = fnd.evt.on(
+    fnd('.some-element')[0], // DOM node
+    'submit', // event name
+    function onSubmit (event) {}, // event handler
+    'form' //selector, optional
+);
+```
+
+Returns a function which, when called, removes event listener.
+
 ## Benchmark & tests
 
 http://jsperf.com/fnd-js
