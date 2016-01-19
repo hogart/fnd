@@ -34,6 +34,20 @@
 			assert.isArray(fnd('div.testDiv'), 'compound selector');
 			assert.isArray(fnd('[data-test]'), 'attr selector');
 			assert.isArray(fnd('x-tag'), 'custom tag');
+			assert.isArray(fnd('.testDiv .cls'), 'classes');
+			assert.isArray(fnd('.testDiv strong.cls'), 'classes and tags');
+            assert.lengthOf(fnd('.testDiv [title]'), 2);
+            assert.isArray(fnd('.testDiv [title]'), 'attributes');
+            assert.isArray(fnd('.testDiv .cls[title]'), 'mix');
+            assert.isArray(fnd('.testDiv [title].cls'), 'mix');
+            assert.isArray(fnd('.testDiv strong[title].cls'), 'mix');
+            assert.isArray(fnd('span + [title]'), 'sibling selector');
+            assert.isArray(fnd('span + .cls'), 'sibling selector');
+            assert.isArray(fnd('.testDiv > .cls'), 'direct descendant selector');
+            assert.isArray(fnd('.testDiv > [title]'), 'direct descendant selector');
+            assert.isArray(fnd('span ~ strong'), '~ selector');
+            assert.isArray(fnd('span ~ .cls'), '~ selector');
+            assert.isArray(fnd('[title] ~ [title]'), '~ selector');
 		});
 
 		it('array elements should be instances of `HTMLElement`', function () {
