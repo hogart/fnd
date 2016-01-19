@@ -89,6 +89,7 @@
 	});
 
 	describe('fnd.evt', function () {
+        var cleanup;
 		function simulateEvent (el, type) {
 			var event = new MouseEvent(type, {
 				view: window,
@@ -97,6 +98,18 @@
 			});
 			el.dispatchEvent(event);
 		}
+
+        beforeEach(function () {
+            cleanup = null;
+        });
+
+        afterEach(function () {
+            if (cleanup && typeof cleanup === 'function') {
+                cleanup();
+            }
+
+            cleanup = null;
+        });
 
 		describe('fnd.evt.on', function () {
 			var on = fnd.evt.on;
@@ -207,6 +220,27 @@
 				/Invalid or missing context for/,
 				'properly thrown error'
 			);
+		});
+
+		it('supports several selectors in one event', function () {
+            var clickCounter = 0;
+			var eventMap = {
+				'click span, strong.cls': function () {
+                    clickCounter++;
+                }
+			};
+			var elem = fnd('.testDiv')[0];
+
+			var off = fnd.evt(elem, eventMap);
+
+            simulateEvent(fnd('span', elem)[0], 'click');
+            simulateEvent(fnd('.cls', elem)[0], 'click');
+            assert.equal(clickCounter, 2, 'handler was called');
+
+            off();
+
+            simulateEvent(fnd('.cls', elem)[0], 'click');
+            assert.equal(clickCounter, 2, 'handler wasn\'t called after off');
 		});
 
 	});

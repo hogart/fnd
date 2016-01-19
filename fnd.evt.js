@@ -55,8 +55,10 @@
         }
     }
 
+    var eventSplitter = /^(\S+)\s*(.*)$/;
+
     function parseEvent (eventKey) {
-        return eventKey.split(/\s+/);
+        return eventKey.split(eventSplitter);
     }
 
     function callableList () {
@@ -80,9 +82,9 @@
 
             unbinders.push(on(
                 element,
-                parts[0],
+                parts[1],
                 extractHandler(events, eventKey, context).bind(context),
-                parts[1]
+                parts[2]
             ));
         });
 
