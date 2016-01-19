@@ -1,6 +1,6 @@
 {
   "name": "fnd",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "fnd.js",
   "repository": "http://github.com/hogart/fnd.git",
   "license": "MIT",
