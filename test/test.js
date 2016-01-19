@@ -89,7 +89,6 @@
 	});
 
 	describe('fnd.evt', function () {
-        var cleanup;
 		function simulateEvent (el, type) {
 			var event = new MouseEvent(type, {
 				view: window,
@@ -98,18 +97,6 @@
 			});
 			el.dispatchEvent(event);
 		}
-
-        beforeEach(function () {
-            cleanup = null;
-        });
-
-        afterEach(function () {
-            if (cleanup && typeof cleanup === 'function') {
-                cleanup();
-            }
-
-            cleanup = null;
-        });
 
 		describe('fnd.evt.on', function () {
 			var on = fnd.evt.on;
