@@ -12,12 +12,15 @@
 }(this, function () {
     'use strict';
     /* global NodeList, HTMLCollection */
-    var slice = Array.prototype.slice;
-    function toArray (arrayLike) {
-        return slice.call(arrayLike, 0);
-    }
 
-    var isArray = Array.isArray || function(arg) {
+    var toArray = Array.from || (function () {
+        var slice = Array.prototype.slice;
+        return function (arrayLike) {
+            return slice.call(arrayLike, 0);
+        }
+    }());
+
+    var isArray = Array.isArray || function (arg) {
         return Object.prototype.toString.call(arg) === '[object Array]';
     };
 
