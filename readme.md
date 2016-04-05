@@ -16,8 +16,8 @@ or
 
 ## Browser support
 
-This is tricky, as different parts of `fnd` have different requirements. Basically minimum is IE9+, but if you're not using `fnd.is` and stick to one-word selectors by tag name and/or ID, you should be fine even in IE6. If you're not using `fnd.is`, but want more complex selectors, then IE8 it is.
-`fnd.is` requires some kind of support of `.matches` method, which means IE9+.
+This is tricky, as different parts of `fnd` have different requirements. Basically minimum is IE9+, but if you're not using `fnd.is`/`fnd.evt` and stick to one-word selectors by tag name or ID, you should be fine even in IE6. If you're not using `fnd.is`, but want more complex selectors, then IE8 it is.
+`fnd.is` requires some kind of support of `.matches` method, which means IE9+. Same goes for `fnd.evt`.
 
 Since `fnd` relies on browser selector engine, it supports only what browser supports. Experience shows that `tagName.className .someChildren` covers about 95% of your selecting abilities, and this works even in IE8.
 
@@ -34,7 +34,7 @@ var list = fnd('ul.someList');
 // this is optimized and internally just shortcut for fnd('li', list[0])
 var items = fnd('li', list);
 
-// This is not optimized. It would walk every node in items and search for `a` inside that node.
+// This is not optimized. It would walk every node in `items` and search for `a` inside that node.
 var hrefs = fnd('a', items).map(function (link) { return link.href; }); // array of urls in order of appearance in document
 ```
 
