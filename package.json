@@ -1,6 +1,6 @@
 {
   "name": "fnd",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "main": "fnd.js",
   "repository": "http://github.com/hogart/fnd.git",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "unit": "opn ./test/index.html",
     "test": "npm run lint && npm run unit"
   },
+  "typings": "fnd.d.ts",
   "jscsConfig": {
     "requireSpaceAfterKeywords": [
       "if",
